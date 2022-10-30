@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         B站与油管屏蔽原神内鬼爆料相关视频
 // @namespace    http://tampermonkey.net/
-// @version      1.1.1
+// @version      1.1.2
 // @description  祝原神爆料内鬼冚家富贵，雄性抵插棍，雌性烂臭閪
 // @author       凡云 - https://space.bilibili.com/3491267
 // @match        *://*.bilibili.com/*
@@ -14,8 +14,8 @@
  
 (function() {
     'use strict';
-    var fuckOffRecoString = /2\.9|3\.[0-9]|爆料|草.*(神|反应|元素|环境|角色|人物|雷)|白术|赛诺|尼露|柯莱|林尼|琳妮特|伊安珊|普契涅拉|智慧/
-    var fuckOffSearchString = /2\.9|3\.[0-9]|爆料|草.*(神|反应|元素|环境|角色|人物|雷)|白术|赛诺|尼露|柯莱|林尼|琳妮特|伊安珊|普契涅拉|智慧/
+    var fuckOffRecoString = /2\.9|3\.[0-9]|爆料|草.*(神|反应|元素|环境|角色|人物|雷)|白术|赛诺|尼露|柯莱|林尼|琳妮特|伊安珊|普契涅拉|(原神|须弥).*新角色|智慧/
+    var fuckOffSearchString = /2\.9|3\.[0-9]|爆料|草.*(神|反应|元素|环境|角色|人物|雷)|白术|赛诺|尼露|柯莱|林尼|琳妮特|伊安珊|普契涅拉|(原神|须弥).*新角色|智慧/
     var fuckOffYtbString = /2\.9|3\.[0-9]|dendro|leak|tighnari|dehya|cyno|lyney|lynette|iansan|collie|pulcinella|草.*(神|反应|元素|环境|角色|人物|雷)/
  
     setInterval(() => {
