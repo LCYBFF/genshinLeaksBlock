@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         B站、油管、推特屏蔽原神内鬼爆料相关视频
 // @namespace    http://tampermonkey.net/
-// @version      2.1.0
+// @version      2.1.1
 // @description  祝原神爆料内鬼和传话太监冚家富贵
 // @author       凡云 - https://space.bilibili.com/3491267
 // @match        *://*.bilibili.com/*
@@ -30,7 +30,7 @@
         // B站标题正文正则
         fuckOffTitleBili: '/2\\.9|3\\.[0-9]|爆料|草.*(神|角色|人物)|白术|提纳里|柯莱|多莉|赛诺|尼露|林尼|琳妮特|伊安珊|普契涅拉|(原神|须弥).*(新角色|智慧|沙漠|声望|地图)/i',
         // B站UP主黑名单
-        fuckOffUsersBili: '/原神百晓生|番鼠鉴赏家|花茶菌_|麻辣柚头车|三日月そら|麻椒黑酱|柠檬酸酸鼠sama|niconico原宿|珉ZM|诚实玩家|VictorGKD|-結成明日奈-|啊皎wijiao|二次元推荐官|跪求B站18加|不上研究生不改name|抱豹宝|慕清溟|不二人游|追风-zzz|天草桑|九重神子_Official|维基洛克|_NIGU_|未泯-_-|改名字真的可以变欧|梦醒一场南柯|黑衣侦探|星扉与Faye|原神最新资讯|云堇我喜欢你啊|-可乐想喝冰阔落-|皇族OL不伤感|克莱恩先生|YOTO油桃小朋友_|御熏|湘夜|清茶沐沐_Kiyotya|感恩呆鹅真君|爱偷蛋的小新|小阿辰Official|桌子上的羊|烧酒博客|凛笙Linson|肥宅阿水|中二之魂陈小屁|得len|星荧之火|Notleaks|来福iFun|GG小茶茶|手夜人hacker|孑孑不是子子|抱紧白晶晶|无限-启源|白玹Xinyu|or信用社主任1|阿叼我亮不亮-|拾叁道|Breadd面包蟹|丨緣帥丶|上山采药的七七|可爱的黄金周|流风回雪up|Cancer梓zz|是王不柴呀|我是你幻幻陛下啊|小沢沢h|houdejian|少三2|你娶初音我嫁牛老师|Just一头臭居居|可曾听闻绛骨|HT_indigo|木木酱_KiKiCyan|梦与现实的抉择|溜了看看|ym夜猫子|茉莉绿茶少糖|Daxy妙啊/i',
+        fuckOffUsersBili: '/原神百晓生|番鼠鉴赏家|花茶菌_|麻辣柚头车|三日月そら|麻椒黑酱|柠檬酸酸鼠sama|niconico原宿|珉ZM|诚实玩家|VictorGKD|-結成明日奈-|啊皎wijiao|二次元推荐官|跪求B站18加|不上研究生不改name|抱豹宝|慕清溟|不二人游|追风-zzz|天草桑|九重神子_Official|维基洛克|_NIGU_|未泯-_-|改名字真的可以变欧|梦醒一场南柯|黑衣侦探|星扉与Faye|原神最新资讯|云堇我喜欢你啊|-可乐想喝冰阔落-|皇族OL不伤感|克莱恩先生|YOTO油桃小朋友_|御熏|湘夜|清茶沐沐_Kiyotya|感恩呆鹅真君|爱偷蛋的小新|小阿辰Official|桌子上的羊|烧酒博客|凛笙Linson|肥宅阿水|中二之魂陈小屁|得len|星荧之火|Notleaks|来福iFun|GG小茶茶|手夜人hacker|孑孑不是子子|抱紧白晶晶|无限-启源|白玹Xinyu|or信用社主任1|阿叼我亮不亮-|拾叁道|Breadd面包蟹|丨緣帥丶|上山采药的七七|可爱的黄金周|流风回雪up|Cancer梓zz|是王不柴呀|我是你幻幻陛下啊|小沢沢h|houdejian|少三2|你娶初音我嫁牛老师|Just一头臭居居|可曾听闻绛骨|HT_indigo|木木酱_KiKiCyan|溜了看看|ym夜猫子|茉莉绿茶少糖|Daxy妙啊/i',
         // 油管标题正文正则
         fuckOffTitleYtb: '/2\.9|3\.[0-9]|dendro|leak|Tighnari|Collei|Dori|dehya|cyno|kusanali|lyney|lynette|iansan|pulcinella|クラクサナリデビ|ドリ|草.*(神|角色|人物)|new.*sumeru|sumeru.*music/i',
         // 油管用户黑名单
@@ -306,7 +306,7 @@
                         fuckOffYtb(e.main, e.item, e.text, e.media, e.user)
                         break;
                     case 'twitter':
-                        fuckOffTwitter(e.item, e.text, e.media, e.user)
+                        fuckOffTwitter(e.main, e.item, e.text, e.media, e.user)
                         break;
                     default:
                         fuckOffCommon(e.main, e.item, e.text, e.media, e.user)
@@ -531,20 +531,6 @@
         #fuckOffLayout {
             display: none;
         }
-        #fuckOffLayout *::-webkit-scrollbar {
-            width: 6px;
-            height: 1px;
-        }
-        #fuckOffLayout *::-webkit-scrollbar-thumb {
-            border-radius: 10px;
-            -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-            background: #dfd0b3;
-        }
-        #fuckOffLayout *::-webkit-scrollbar-track {
-            -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-            border-radius: 10px;
-            background: #ededed;
-        }
         #fuckOffLayout * {
             font-family: 'system-ui' !important
         }
@@ -708,7 +694,6 @@
         #fuckOffLayout .btnGroup {
             display: flex;
             justify-content: space-evenly;
-            margin-top: 10px;
         }
         #fuckOffLayout .btnGroup img {
             cursor: pointer;
