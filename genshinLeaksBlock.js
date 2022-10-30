@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         B站、油管、推特屏蔽原神内鬼爆料相关视频
 // @namespace    http://tampermonkey.net/
-// @version      2.0.2
+// @version      2.0.3
 // @description  祝原神爆料内鬼和传话太监冚家富贵
 // @author       凡云 - https://space.bilibili.com/3491267
 // @match        *://*.bilibili.com/*
@@ -20,23 +20,23 @@
 // @noframes
 // @license      MIT
 // ==/UserScript==
- 
+
 (function() {
     'use strict';
     // 预设配置
-    var fuckOffDefaultConfig = {
+    const fuckOffDefaultConfig = {
         outLink: 'https://www.bilibili.com/video/BV1Ht4y1t7m',
         helpLink: 'https://greasyfork.org/zh-CN/scripts/447376',
-        // B站标题正则
-        fuckOffTitleBili: '/2\\.9|3\\.[0-9]|爆料|草.*(神|角色|人物)|白术|赛诺|尼露|柯莱|林尼|琳妮特|伊安珊|普契涅拉|(原神|须弥).*(新角色|智慧|沙漠)/i',
+        // B站标题正文正则
+        fuckOffTitleBili: '/2\\.9|3\\.[0-9]|爆料|草.*(神|角色|人物)|白术|提纳里|柯莱|多莉|赛诺|尼露|林尼|琳妮特|伊安珊|普契涅拉|(原神|须弥).*(新角色|智慧|沙漠|声望|地图)/i',
         // B站UP主黑名单
-        fuckOffUsersBili: '/原神百晓生|番鼠鉴赏家|花茶菌_|麻辣柚头车|三日月そら|麻椒黑酱|柠檬酸酸鼠sama|niconico原宿|珉ZM|诚实玩家|VictorGKD|-結成明日奈-|啊皎wijiao|二次元推荐官|跪求B站18加|不上研究生不改name|抱豹宝|慕清溟|不二人游|追风-zzz|天草桑|九重神子_Official|维基洛克|_NIGU_|未泯-_-|改名字真的可以变欧|梦醒一场南柯|黑衣侦探|星扉与Faye|原神最新资讯|云堇我喜欢你啊|-可乐想喝冰阔落-|皇族OL不伤感|克莱恩先生|YOTO油桃小朋友_|御熏|湘夜|清茶沐沐_Kiyotya|感恩呆鹅真君|爱偷蛋的小新|小阿辰Official|桌子上的羊|烧酒博客|凛笙Linson|肥宅阿水|中二之魂陈小屁|得len|星荧之火|Notleaks|来福iFun|GG小茶茶|手夜人hacker|孑孑不是子子|抱紧白晶晶|无限-启源|白玹Xinyu|or信用社主任1|阿叼我亮不亮-|拾叁道|Breadd面包蟹|丨緣帥丶|上山采药的七七|可爱的黄金周|流风回雪up|Cancer梓zz|是王不柴呀|我是你幻幻陛下啊|小沢沢h|houdejian|少三2|你娶初音我嫁牛老师|Just一头臭居居|可曾听闻绛骨|HT_indigo|木木酱_KiKiCyan|梦与现实的抉择|溜了看看|ym夜猫子|茉莉绿茶少糖/i',
-        // 油管标题正则
-        fuckOffTitleYtb: '/2\.9|3\.[0-9]|dendro|leak|dehya|cyno|lyney|lynette|iansan|collie|pulcinella|kusanali|クラクサナリデビ|ドリ|草.*(神|角色|人物)|new.*sumeru|sumeru.*music/i',
+        fuckOffUsersBili: '/原神百晓生|番鼠鉴赏家|花茶菌_|麻辣柚头车|三日月そら|麻椒黑酱|柠檬酸酸鼠sama|niconico原宿|珉ZM|诚实玩家|VictorGKD|-結成明日奈-|啊皎wijiao|二次元推荐官|跪求B站18加|不上研究生不改name|抱豹宝|慕清溟|不二人游|追风-zzz|天草桑|九重神子_Official|维基洛克|_NIGU_|未泯-_-|改名字真的可以变欧|梦醒一场南柯|黑衣侦探|星扉与Faye|原神最新资讯|云堇我喜欢你啊|-可乐想喝冰阔落-|皇族OL不伤感|克莱恩先生|YOTO油桃小朋友_|御熏|湘夜|清茶沐沐_Kiyotya|感恩呆鹅真君|爱偷蛋的小新|小阿辰Official|桌子上的羊|烧酒博客|凛笙Linson|肥宅阿水|中二之魂陈小屁|得len|星荧之火|Notleaks|来福iFun|GG小茶茶|手夜人hacker|孑孑不是子子|抱紧白晶晶|无限-启源|白玹Xinyu|or信用社主任1|阿叼我亮不亮-|拾叁道|Breadd面包蟹|丨緣帥丶|上山采药的七七|可爱的黄金周|流风回雪up|Cancer梓zz|是王不柴呀|我是你幻幻陛下啊|小沢沢h|houdejian|少三2|你娶初音我嫁牛老师|Just一头臭居居|可曾听闻绛骨|HT_indigo|木木酱_KiKiCyan|梦与现实的抉择|溜了看看|ym夜猫子|茉莉绿茶少糖|Daxy妙啊/i',
+        // 油管标题正文正则
+        fuckOffTitleYtb: '/2\.9|3\.[0-9]|dendro|leak|Tighnari|Collei|Dori|dehya|cyno|kusanali|lyney|lynette|iansan|pulcinella|クラクサナリデビ|ドリ|草.*(神|角色|人物)|new.*sumeru|sumeru.*music/i',
         // 油管用户黑名单
-        fuckOffUsersYtb: '/Undiscovery Genshin|WhyMike Live/i',
+        fuckOffUsersYtb: '/Undiscovery Genshin|WhyMike Live|Froggy|•Bex•/i',
         // 推特正文正则
-        fuckOffTitleTwitter: '/2\\.9|3\\.[0-9]|dendro|leak|dehya|cyno|lyney|lynette|iansan|collie|pulcinella|kusanali|クラクサナリデビ|ドリ|草.*(神|角色|人物)|new.*sumeru/i',
+        fuckOffTitleTwitter: '/2\\.9|3\\.[0-9]|dendro|leak|Tighnari|Collei|Dori|dehya|cyno|kusanali|lyney|lynette|iansan|pulcinella|クラクサナリデビ|ドリ|草.*(神|角色|人物)|new.*sumeru/i',
         // 推特用户黑名单
         fuckOffUsersTwitter: '/Undiscovery Genshin/i',
         fuckOffTimeout: 500
@@ -105,15 +105,11 @@
     }
  
     // 目标标题和图片模糊化处理
-    function blurFuckOff(type = '', item = '', title = '', img = '', isTweet = false) {
+    function blurFuckOff(type = '', item = '', title = '', img = '') {
         if (type === 'on') {
             // 添加模糊化
             item.addClass('fuckOff')
-            item.find(title).addClass('fuckOffBlur')
-            if (isTweet) {
-                // 将推文格式化到提示文本(推特)
-                item.find(title).attr('title', item.find(title).text())
-            }
+            item.find(title).addClass('fuckOffBlur').attr('title', item.find(title).text())
             item.find(img).addClass('fuckOffBlur')
         } else {
             // 去除模糊化
@@ -137,11 +133,10 @@
                 // B站右侧推荐栏（新版）
                 fuckOffBili('#reco_list', '.video-page-card-small', '.title', 'img', '.upname .name')
                 // B站视频播放结束推荐列表（新旧版）
-                fuckOffBili('.bpx-player-ending-related', '.bpx-player-ending-related-item', '.bpx-player-ending-related-item-img', '.bpx-player-ending-related-item-title', '')
+                fuckOffBili('.bpx-player-ending-related', '.bpx-player-ending-related-item', '.bpx-player-ending-related-item-title', '.bpx-player-ending-related-item-img', '')
                 // B站搜索页（旧版）
                 fuckOffBili('#server-search-app .video-list', '.video-item', '.title', 'img', '.up-name')
                 // B站新版搜索页（新版）
-                fuckOffBili('.search-page .video-list', '.video-list-item', '.bili-video-card__info--tit', 'img', '.bili-video-card__info--author')
             }, fuckOffDefaultConfig.fuckOffTimeout)
         }
  
@@ -274,12 +269,6 @@
     var fuckOffOpenButtonImg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEIAAABCCAMAAADUivDaAAAAkFBMVEVHcEybnJ+cnJ+anJ+Zm52anJ+cnJ+bm5+bnZ+bm5+cnJ6amp/s5dibnJ9WYXjd186goKPd182goaNpcoR8gpDZ1czZ1MxocoTY08qqq65faX7GxMDX0sm6t7S5t7THxMC0s7RgaX6zs7Sho6hxeoqztLS9vLri3dJ7gpDPzMaXm6KOk5y0tLRyeoqYm6Lj3dLW6FtKAAAADHRSTlMA79/fcG9QgH9AX2BxaR3bAAABz0lEQVRYw8XY63bCIAwAYHUqulXU0Xmpbl7nfdv7v92w0o1CUhI8O8svPcp3QsBArdX+PLqtVvcuoF3v6Wg8xgudnonO3UK0YQmRRkmIMhwhwvAEtlEIb5Mk6b/GGEYYaOAa/QHbKIR+kkQansA2AIFpgALLQASGgQpko0IgGoBwWbIMKAeVcvKAhJmUR7oB1uEs5YZcD7iSSsqMWlNYuEgdC5qBrKa6EilpbRFhKvPYEQxEeFndiGwUNDBBSRMqZASFoPFkWqNbh5W0Qi3Ln07MoHZOPJhOa39jv0ulEw5ienI9P7uNN7R29WklgVDno5/G9dxvmte/M1ASDSsVM6wJEe8pThzWEFFMZGKtxWkMjc821rrMrYnU6kA5k5mXymEBlbNxu8r4aeTzKWUyXjgbwwwyFyBxe/c8dLaWZWyRrSWK7Rk0tvuAgBuZmcUoKKCG+bGvCQJqpBUtR7htCzZmeOMTfvMEjS9djTFVQIxP5BAQ8EECGXomI7oAGx8pRwCN6ZoloGvLECoNolBhkAXUYAiIwRJAgykABlvwjDlf+DF6b3MNFA8TgvdAIvxHGqYAGGzBMyIEx4gSSkakYBnRgr4A5deXRvt//3wgxTeKjHm6C4QG7gAAAABJRU5ErkJggg==',
     // 设置界面标题背景图
     fuckOffLayoutHeaderBgImg = 'data:image/jpeg;base64,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',
-    // 设置界面背景图
-    fuckOffLayoutBodyBgImg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA5kAAARNAQMAAADikBbSAAAABlBMVEVHcEzRu42HWVO4AAAAAnRSTlMAgJsrThgAAAIXSURBVHja7dSxDcMwDERRAincSetoLG9gj5ox1DELpDQIGHx/gVfdRcysbUdEI3REbQsKhb4CzcxS88q8G6HfcZSi5/pAoU+hs3gyuxca1UGhUCgUCoVCoVAoFAqFQqFQKBQKhUKhUCgUCoVCoVAoFAqFQqFQKBQKhUKhUCgUCoVCoVAoFAqFQqFQKBQKhUKhUCgUCoVCoVAoFAqFQqFQKBQKhUKhUCgUCoVCoVAoFAqFQqFQKBQKhUKhUCgUCoVCoVAoFAqFQqFQKBQKhUKhUCgUCoVCoVAoFAqFQqFQKBQKhUKhUCgUCoVCoVAoFAqFQqFQKBQKhUKhUCgUCoVCoVAoFAqFQqFQKBQKhUKhUCgUCoVCoVAoFAqFQqFQKBQKhUKhUCgUCoVCoVAoFAqFQqFQKBQKhUKhUCgUCoVCoVAoFAqFQqFQKBQKhUKhUCgUCoVCoVAoFAqFQqFQKBQKhUKhUCgUCoVCoVAoFAqFQqFQKBQKhUKhUCgUCoVCoVAoFAqFQqFQKBQKhUKhUCgUCoVCoVAoFAqFQqFQKBQKhUKhUCgUCoVCoVAoFAqFQqFQKBQKhUKhUCgUCoVCoVAoFAqFQqFQKBQKhUKhUCgUCoVCoVAoFAqFQqFQKBQKhUKhUCgUCoVCoVAoFAqFQqFQKPQ/OrOUvHYvdByl6Lmg0KfQzOLJZHZCYxT//YqAQqFvQGfWtjuhP3cZq/iY7bYYAAAAAElFTkSuQmCC',
-    // 设置界面初始化按钮
-    resetButtonImg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEQAAABECAMAAAAPzWOAAAAAgVBMVEVHcEwzMzMyMjIzMzMyMjIyMjIzMzMyMjI0NDQzMzMzMzMzMzMyMjIqKiozMzMyMjIzMzMzMzMzMzMyMjIyMjIzMzMyMjIzMzMzMzMkJCQzMzMzMzMzMzMyMjI1NTUzMzM4oeQ1WXA4n+E3n+E3jMM3hrg0WW80VGg0U2gzRVAzRE/vQxNVAAAAH3RSTlMAPLfrcYD3JFP4zPC2Boj9/jLOmO6gXKrhB4Mj3t8izqH2PwAAAeFJREFUWMO1mNmagjAMhSvIJigoCohgWNWZ93/AEdQZqS1hyZwb/aD9tW16mpQxqYwgDneJallqsgvjwGBjdTQPEXCKDuZxBGLr70Govb8diFgoHkjlKYsBCMMBRA42O2tNB1S6tu5jnFcwSKuznGHaMFC2KWMsXRgsdylmbGCUNgQMIWUJo/UxItMdD3G52T3ZMEH2qRNjK5ik1XvUaTBR2tt+0adC9L995MBkOb97H2bo5QzKHIjy9DFvDsR7eJ0Ps+S3nizy06+6uvHPrlX9LfLdxr1NEb7OsjLvPsrLLKtFbZvgP4heVBlPaRhZJWp7uEMi0YtryVFaRnkTtY3u0SqerrxLycvsc4AvGSyAAZReBgQshj5K0XbMiz4GxCwElIIwIGQ7eRi1nYv8+SFvt2MpYBSMASlTAaNgDFCZBTilnwEWArk8IBcEouIMjKKyZP7EJvgSXy74EocY4zmooi/YYiTUuK/isA9wBkYJpFbQ7dZLMWSmxHd6UGSmJLfH7g+3FKk9yoya//MNRWrUsiPjOubIIDm8aI5RkgOdJrUgSXJo0i2SxI8mBZ2aDJ/p03KaAoGmVKEpmmjKN5pC8r7SQ0va038X1zRlPtGFA9HVB9ElzNt1UNpcB6XIddAPwHG2emFKdTcAAAAASUVORK5CYII=',
-    // 设置界面确认按钮
-    submitButtonImg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEQAAABECAMAAAAPzWOAAAAAsVBMVEVHcEwzMzMyMjIzMzMyMjIyMjIzMzMyMjI0NDQzMzMzMzMzMzMyMjIqKiozMzMyMjIzMzMzMzMzMzMyMjIyMjIzMzMyMjIzMzMzMzMkJCQzMzMzMzMzMzMyMjI1NTUzMzP/zDM9OjPouzM0NDNsXjP6yTP2xTPTqzNIQzN5ZzPSqjOvkDOghTOtjzNGQTM5NzNPSDM3NjP5yDPAnTPuvzOpizM1NTODbzPpvDOnijNXTjNKwoLwAAAAH3RSTlMAPLfrcYD3JFP4zPC2Boj9/jLOmO6gXKrhB4Mj3t8izqH2PwAAAhVJREFUWMO1WOmagjAMrCKKircinvXAWzwBj/d/sG1ZddWEFdjs/HMa56NJmiZlLBAZo92sdpVsVulWm20jw6KipTVM/gazobUiSFRqdY6iXquElEgkyzwQ5WQihERG5x+gf/JOQU3zj0irhd80+jkeCrl+sIaW5yGR14I0UiUeGqUUrlHkkVAk0EBVUjwywI60UnSR0pt3O3keA/nOS47leCzknrNO5TGhPp2XdFyR9M850nls6I+zH2QxXNgz53BwZvZiGGRzrwxJfHm3mg4emK52uFXyVsfQGrRdTwYvmKy3aJX6rnU1bG2zHAAsN5hlza/JWD29jvy/jVxrvt/PLff284rVXVm9New7/D+dT96d8E5nXwX7Fpn8DcQf/l6OLxEZHv0dIX5pCBET0mtpfxm/kuOLZNfQ2hTZisRWxuU4fqfH8lsmSKQzzIDkSvoDya6h9MsK8gZrQ1uZYycsmieZdVC9zZqAW8gweJiIJ4O2AHSTVQFnC0sXz3FXLNmArbIe4GbC0sJFLLE0A2yPKYBzhOUcF5mLJQewCssC7iAs97jIXiwdAJulESHZTvfvju3ShJgk2UjSnuQAkpQCkqJEUx5JCjXJlUFyedFcoyQXOk1rQdLk0LRbJI0fTQsatxnu07flNAMCzahCMzTRjG80g6SIdNiRtvPfwzXNmE/04ED09EH0CPP0HNSTz0G9D89BX3BUv7mYoU78AAAAAElFTkSuQmCC',
     // 设置界面四角图标
     cornerIcon = 'data:image/png;base64,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',
     // 外链图标
@@ -292,22 +281,19 @@
     brImg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAy0AAAAbCAMAAABGBZAZAAAAb1BMVEXRu43Pt4/Ru43Tu4vQu4zfv4DSuo1HcEzPv4/Ru43Pu4/RvI7Pv4/SuYzPuo3Puo/PvIzPuorKtYrKv4rQu47SuYzNu43Uuo/RuY7SvIzPuYzSv4zPu4vTuo7Quo7UuorQuozPt4fRvI7Pu43RuI6dyzQmAAAAJXRSTlOAIDhAeAhgABBwQEggUGAwUDAYGHgoODBYUFAoQGhoMGggWHBICkyxTwAAAjBJREFUGBntwem2okgQhdEPyMwTATjdqeapu9//GZuSpZYKd9VfIfZGczYKYY3eNAfNqDGFsD5GrRlomiU2CmF9PvNimoamfQNMIayNAUXT0KSGQVEIa/OZQaNJaErNUa0Q1uXA0QdNQRN+MHoxXekahbAkXaMrlhh90AR0J3ecuOkiFyimEJYiFyimC3NOGt1DN3KTuPAnnZgzcFMIy2DOwE0nz86FH0w30JV+k7jWaNQnSAm8UghL0CdICbzSqObGptcVdJa/bBL3imlQA1uzPdAohMdXA/+Y7YFGAyvc882XrDM06pvCnEbSzr3S4NWhUQiPrgOvNNh5epVyk5hRvvYaIeW+KYn3+EGyrFFLCEvQZh3lLPXOe1L52meJX3v+QjGdmRPCo/v2rLO+8Bf2FVKuusK7vMB/WUfZpJ0TwiP7t5Zy1lHuYOu8J227KktoVHU/mZHarBb8oEHvflAIj+81+UGD3qGTWuZsuyrrCJ3Z7mPi3tY0aIGNWQFqhfD4WmBjVoBaAyvcSx93WWfoyuueG7VGlcNLglQphCWoHF4SpEqjlmtpW2X9Cd2wnXPhzzoxZ+CmEJbBnIGbTp6ci9Rm3UD3Wk7cdGEFtlkhLIUV2GZdmHPSZt1BE56co2S60nYKYUnaTlcscZQqTUBTzPltpxDWpeY3N01Bk54YfFIIa1MYPGsSmlYDphDWxoBa09CMwieFsD57vmsGmlFhCmF9DNMMNOdNIazRm+b8DynQD179IlWYAAAAAElFTkSuQmCC';
  
     // 右侧按钮
-    var fuckOffOpenButton = "<a id='fuckOffOpenButton'>原神内鬼屏蔽</a>";
+    const fuckOffOpenButton = "<a id='fuckOffOpenButton'>原神内鬼屏蔽</a>";
     $('body').append(fuckOffOpenButton)
  
     // 设置界面
-    const fuckOffLayout = '<div id="fuckOffLayout"><div class="bg"></div><div class="box"><div class="cornerIcon lt"></div><div class="cornerIcon rt"></div><div class="cornerIcon lb"></div><div class="cornerIcon rb"></div><div class="toolerGroup"><a href="javascript:;"class="outlinkButton"target="_blank"title="作者视频介绍"></a><a href="javascript:;"class="helpButton"target="_blank"title="查看帮助文档"></a><a href="javascript:;"class="closeButton"title="关闭界面"></a></div><div class="header"><h1>原神内鬼屏蔽设置</h1></div><div class="body"><div class="tabs"><div class="tabs-title"><div class="tab active">B站</div><div class="tab">油管</div><div class="tab">推特</div></div><div class="tabs-content"><div class="tab-item active"data-name="Bili"><div class="form"><p>屏蔽区域</p><label>首页推荐栏、搜索页、视频页推荐列表</label></div><div class="form"><p>标题关键词</p><textarea id="fuckOffTitleBili"rows="5"></textarea></div><div class="form"><p>作者黑名单</p><textarea id="fuckOffUsersBili"rows="5"></textarea></div></div><div class="tab-item"data-name="Ytb"><div class="form"><p>屏蔽区域</p><label>首页、搜索页、视频页推荐列表</label></div><div class="form"><p>标题关键词</p><textarea id="fuckOffTitleYtb"rows="5"></textarea></div><div class="form"><p>作者黑名单</p><textarea id="fuckOffUsersYtb"rows="5"></textarea></div></div><div class="tab-item"data-name="Twitter"><div class="form"><p>屏蔽区域</p><label>推文列表</label></div><div class="form"><p>正文关键词</p><textarea id="fuckOffTitleTwitter"rows="5"></textarea></div><div class="form"><p>作者黑名单</p><textarea id="fuckOffUsersTwitter"rows="5"></textarea></div></div></div></div><div class="btnGroup"><img src=""class="resetButton"title="初始化配置"alt=""><img src=""class="submitButton"title="确认修改"alt=""></div><img src=""class="brImg"alt=""></div></div><div id="fuckOffMsg"></div></div>';
+    const fuckOffLayout = '<div id="fuckOffLayout"><div class="bg"></div><div class="box"><div class="cornerIcon lt"></div><div class="cornerIcon rt"></div><div class="cornerIcon lb"></div><div class="cornerIcon rb"></div><div class="toolerGroup"><a href="javascript:;"class="outlinkButton"target="_blank"title="作者视频介绍"></a><a href="javascript:;"class="helpButton"target="_blank"title="查看帮助文档"></a><a href="javascript:;"class="closeButton"title="关闭界面"></a></div><div class="header"><h1>原神内鬼屏蔽设置</h1></div><div class="body"><div class="tabs"><div class="tabs-title"><div class="tab active">B站</div><div class="tab">油管</div><div class="tab">推特</div></div><div class="tabs-content"><div class="tab-item active"data-name="Bili"><div class="form"><p>屏蔽区域</p><label>首页推荐栏、搜索页、视频页推荐列表</label></div><div class="form"><p>标题关键词</p><textarea id="fuckOffTitleBili"rows="5"></textarea></div><div class="form"><p>作者黑名单</p><textarea id="fuckOffUsersBili"rows="5"></textarea></div></div><div class="tab-item"data-name="Ytb"><div class="form"><p>屏蔽区域</p><label>首页、搜索页、视频页推荐列表</label></div><div class="form"><p>标题关键词</p><textarea id="fuckOffTitleYtb"rows="5"></textarea></div><div class="form"><p>作者黑名单</p><textarea id="fuckOffUsersYtb"rows="5"></textarea></div></div><div class="tab-item"data-name="Twitter"><div class="form"><p>屏蔽区域</p><label>推文列表</label></div><div class="form"><p>正文关键词</p><textarea id="fuckOffTitleTwitter"rows="5"></textarea></div><div class="form"><p>作者黑名单</p><textarea id="fuckOffUsersTwitter"rows="5"></textarea></div></div></div></div><div class="btnGroup"><div class="resetButton"title="初始化配置"alt=""><span></span><span></span></div><div class="submitButton"title="确认修改"alt=""><div class="yellow-circle"><div class="black-circle"></div></div></div></div><img src=""class="brImg"alt=""></div></div><div id="fuckOffMsg"></div></div>';
     $('body').append(fuckOffLayout)
  
     $('#fuckOffOpenButton').css('background-image', 'url(' + fuckOffOpenButtonImg + ')')
     $('#fuckOffLayout .box .header').css('background-image', 'url(' + fuckOffLayoutHeaderBgImg + ')')
-    $('#fuckOffLayout .box .body').css('background-image', 'url(' + fuckOffLayoutBodyBgImg + ')')
     $('#fuckOffLayout .cornerIcon').css('background-image', 'url(' + cornerIcon + ')')
     $('#fuckOffLayout .outlinkButton').css('background-image', 'url(' + outlinkIcon + ')').attr('href', fuckOffDefaultConfig.outLink)
     $('#fuckOffLayout .helpButton').css('background-image', 'url(' + helpIcon + ')').attr('href', fuckOffDefaultConfig.helpLink)
     $('#fuckOffLayout .closeButton').css('background-image', 'url(' + closeIcon + ')')
-    $('.resetButton').attr('src', resetButtonImg)
-    $('.submitButton').attr('src', submitButtonImg)
     $('.brImg').attr('src', brImg)
  
     // 初始化
@@ -541,6 +527,48 @@
         .fuckOffBlur {
             filter: blur(30px);
         }
+        #fuckOffLayout .resetButton, #fuckOffLayout .submitButton {
+          background-color: #333333;
+          border-radius: 50%;
+          width: 68px;
+          height: 68px;
+          cursor: pointer;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-wrap: wrap;
+        }
+        #fuckOffLayout .resetButton span {
+          border-radius: 10px;
+          width: 35px;
+          height: 5px;
+          background-color: #38a1e4;
+          margin: 6px 0;
+          transition: 0.4s;
+        }
+        #fuckOffLayout .resetButton span:first-child {
+          -webkit-transform: rotate(-45deg) translate(-12px, 12px);
+          transform: rotate(-45deg) translate(-12px, 12px);
+        }
+        #fuckOffLayout .resetButton span:last-child {
+          -webkit-transform: rotate(45deg) translate(-12px, -12px);
+          transform: rotate(45deg) translate(-12px, -12px);
+        }
+        #fuckOffLayout .submitButton .yellow-circle {
+          width: 35px;
+          height: 35px;
+          background-color: #ffcc33;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        #fuckOffLayout .submitButton .black-circle {
+          background-color: #333333;
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+        }
         @media screen and (max-width: 768px){
             #fuckOffLayout .box {
                 width: 95%;
@@ -560,3 +588,4 @@
  
     GM_addStyle(FUCKOFF_STYLE)
  
+})();
