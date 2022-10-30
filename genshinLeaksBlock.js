@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         B站、油管、推特屏蔽原神内鬼爆料相关视频
 // @namespace    http://tampermonkey.net/
-// @version      2.1.3
+// @version      2.2.0
 // @description  祝原神爆料内鬼和传话太监冚家富贵
 // @author       凡云 - https://space.bilibili.com/3491267
 // @match        *://*.bilibili.com/*
@@ -25,20 +25,26 @@
     'use strict';
     // 预设配置
     const fuckOffDefaultConfig = {
-        outLink: 'https://www.bilibili.com/video/BV1Ht4y1t7m',
+        outLink: 'https://space.bilibili.com/3491267',
         helpLink: 'https://greasyfork.org/zh-CN/scripts/447376',
         // B站标题正文正则
-        fuckOffTitleBili: '/2\\.9|3\\.[0-9]|爆料|草.*(角色|人物)|白术|柯莱|多莉|赛诺|尼露|林尼|琳妮特|伊安珊|普契涅拉|(原神|须弥).*(沙漠|声望|地图)/i',
+        fuckOffTitleBili: '/3\\.[1-9]|爆料|草.*(角色|人物)|白术|艾尔海森|迪希雅|妮露|纳西妲|赛诺/i',
         // B站UP主黑名单
         fuckOffUsersBili: '/原神百晓生|番鼠鉴赏家|花茶菌_|麻辣柚头车|三日月そら|麻椒黑酱|柠檬酸酸鼠sama|niconico原宿|珉ZM|诚实玩家|VictorGKD|-結成明日奈-|啊皎wijiao|二次元推荐官|跪求B站18加|不上研究生不改name|抱豹宝|慕清溟|不二人游|追风-zzz|天草桑|九重神子_Official|维基洛克|_NIGU_|未泯-_-|改名字真的可以变欧|梦醒一场南柯|黑衣侦探|星扉与Faye|原神最新资讯|云堇我喜欢你啊|-可乐想喝冰阔落-|皇族OL不伤感|克莱恩先生|YOTO油桃小朋友_|御熏|湘夜|清茶沐沐_Kiyotya|感恩呆鹅真君|爱偷蛋的小新|小阿辰Official|桌子上的羊|烧酒博客|凛笙Linson|肥宅阿水|中二之魂陈小屁|得len|星荧之火|Notleaks|来福iFun|GG小茶茶|手夜人hacker|孑孑不是子子|抱紧白晶晶|无限-启源|白玹Xinyu|or信用社主任1|阿叼我亮不亮-|拾叁道|Breadd面包蟹|丨緣帥丶|上山采药的七七|可爱的黄金周|流风回雪up|Cancer梓zz|是王不柴呀|我是你幻幻陛下啊|小沢沢h|houdejian|少三2|你娶初音我嫁牛老师|Just一头臭居居|可曾听闻绛骨|HT_indigo|木木酱_KiKiCyan|溜了看看|ym夜猫子|茉莉绿茶少糖|至东-达达利亚|Daxy妙啊/i',
+        // B站UP主白名单
+        fuckOffUsersWhiteBili: '/^原神$|^凡云$/',
         // 油管标题正文正则
-        fuckOffTitleYtb: '/2\\.9|3\\.[0-9]|dendro|leak|Tighnari|Collei|Dori|dehya|cyno|kusanali|lyney|lynette|iansan|pulcinella|クラクサナリデビ|ドリ|草.*(角色|人物)|sumeru.*music/i',
+        fuckOffTitleYtb: '/3\\.[1-9]|dendro|leak|Alhaitham|Dehya|Nilou|Nahida|Cyno|Kusanali|アルハイゼン|ディシア|ニィロウ|ナヒーダ|セノ|クラクサナリデビ|sumeru.*(music|ost)/i',
         // 油管用户黑名单
-        fuckOffUsersYtb: '/Undiscovery Genshin|WhyMike Live|Froggy|•Bex•|Anonymous Leaker/i',
+        fuckOffUsersYtb: '/Undiscovery Genshin|WhyMike Live|Froggy|•Bex•|Anonymous Leaker|原神 リーク Genshin leak|impurfx|Genshin Impact : Сливы/i',
+        // 油管用户白名单
+        fuckOffUsersWhiteYtb: '/原神-Genshin-公式|Genshin Impact|Arnold Delgado/',
         // 推特正文正则
-        fuckOffTitleTwitter: '/2\\.9|3\\.[0-9]|dendro|leak|Tighnari|Collei|Dori|dehya|cyno|kusanali|lyney|lynette|iansan|pulcinella|クラクサナリデビ|ドリ|草.*(角色|人物)/i',
+        fuckOffTitleTwitter: '/3\\.[1-9]|dendro|leak|Alhaitham|Dehya|Nilou|Nahida|Cyno|Kusanali|アルハイゼン|ディシア|ニィロウ|ナヒーダ|セノ|クラクサナリデビ/i',
         // 推特用户黑名单
         fuckOffUsersTwitter: '/Undiscovery Genshin/i',
+        // 推特用户白名单
+        fuckOffUsersWhiteTwitter: '/原神（Genshin）公式|Genshin Impact|Arnold Delgado/',
         fuckOffTimeout: 500,
         areaList: [{
             name: 'B站首页推荐栏（旧版）',
@@ -47,7 +53,8 @@
             item: '.video-card-reco',
             text: '.title',
             media: 'img',
-            user: '.up'
+            user: '.up',
+            on: true
         }, {
             name: 'B站首页推荐栏（新版）',
             area: 'bilibili',
@@ -55,7 +62,17 @@
             item: '.bili-video-card',
             text: '.bili-video-card__info--tit a',
             media: 'img',
-            user: '.bili-video-card__info--author'
+            user: '.bili-video-card__info--author',
+            on: true
+        }, {
+            name: 'B站首页推荐栏（内测）',
+            area: 'bilibili',
+            main: '.recommended-container_floor-aside',
+            item: '.bili-video-card',
+            text: '.bili-video-card__info--tit a',
+            media: 'img',
+            user: '.bili-video-card__info--author',
+            on: true
         }, {
             name: 'B站视频页右侧推荐栏（旧版）',
             area: 'bilibili',
@@ -63,7 +80,8 @@
             item: '.video-page-card',
             text: '.title',
             media: 'img',
-            user: '.up'
+            user: '.up',
+            on: true
         }, {
             name: 'B站视频页右侧推荐栏（新版）',
             area: 'bilibili',
@@ -71,7 +89,8 @@
             item: '.video-page-card-small',
             text: '.title',
             media: 'img',
-            user: '.upname .name'
+            user: '.upname .name',
+            on: true
         }, {
             name: 'B站视频播放结束推荐列表（新旧版）',
             area: 'bilibili',
@@ -79,7 +98,8 @@
             item: '.bpx-player-ending-related-item',
             text: '.bpx-player-ending-related-item-title',
             media: '.bpx-player-ending-related-item-img',
-            user: ''
+            user: '',
+            on: true
         }, {
             name: 'B站搜索页（旧版）',
             area: 'bilibili',
@@ -87,7 +107,8 @@
             item: '.video-item',
             text: '.title',
             media: 'img',
-            user: '.up-name'
+            user: '.up-name',
+            on: true
         }, {
             name: 'B站搜索页（新版）',
             area: 'bilibili',
@@ -95,7 +116,8 @@
             item: '.video-list-item, .bili-video-card',
             text: '.bili-video-card__info--tit',
             media: 'img',
-            user: '.bili-video-card__info--author'
+            user: '.bili-video-card__info--author',
+            on: true
         }, {
             name: 'B站频道页（精选、综合）',
             area: 'bilibili',
@@ -103,7 +125,8 @@
             item: '.video-card',
             text: '.video-name',
             media: '.cover-picture__image',
-            user: '.up-name__text'
+            user: '.up-name__text',
+            on: true
         }, {
             name: 'B站UP主空间代表作',
             area: 'bilibili',
@@ -111,7 +134,8 @@
             item: '.small-item',
             text: '.title',
             media: 'img',
-            user: ''
+            user: '',
+            on: true
         }, {
             name: 'B站UP主空间（TA的视频、投稿）',
             area: 'bilibili',
@@ -119,7 +143,8 @@
             item: '.small-item',
             text: '.title',
             media: 'img',
-            user: ''
+            user: '',
+            on: true
         }, {
             name: 'B站UP主空间合集',
             area: 'bilibili',
@@ -127,7 +152,8 @@
             item: '.small-item',
             text: '.title',
             media: 'img',
-            user: ''
+            user: '',
+            on: true
         }, {
             name: 'B站UP主空间动态',
             area: 'bilibili',
@@ -135,7 +161,8 @@
             item: '.bili-dyn-list__item',
             text: '.bili-dyn-content__orig__desc, .bili-dyn-card-video__title',
             media: '.bili-album__preview__picture, .bili-awesome-img',
-            user: ''
+            user: '',
+            on: true
         }, {
             name: 'B站评论区评论文本（旧版）楼主回复',
             area: 'bilibili',
@@ -143,7 +170,8 @@
             item: '.list-item',
             text: '.text',
             media: '',
-            user: ''
+            user: '',
+            on: true
         }, {
             name: 'B站评论区评论文本（旧版）楼中楼回复',
             area: 'bilibili',
@@ -151,7 +179,8 @@
             item: '.reply-item',
             text: '.text-con',
             media: '',
-            user: ''
+            user: '',
+            on: true
         }, {
             name: 'B站评论区评论文本（新版）楼主回复',
             area: 'bilibili',
@@ -159,7 +188,8 @@
             item: '.reply-item',
             text: '.root-reply .reply-content',
             media: '',
-            user: ''
+            user: '',
+            on: true
         }, {
             name: 'B站评论区评论文本（新版）楼中楼回复',
             area: 'bilibili',
@@ -167,7 +197,17 @@
             item: '.sub-reply-item',
             text: '.sub-reply-content',
             media: '',
-            user: ''
+            user: '',
+            on: true
+        }, {
+            name: 'B站消息中心（回复我的）',
+            area: 'bilibili',
+            main: '.reply-card',
+            item: '.reply-item',
+            text: '.line-2 .text',
+            media: '',
+            user: '.line-1 .name-field',
+            on: true
         }, {
             name: '油管首页推荐',
             area: 'youtube',
@@ -175,7 +215,8 @@
             item: 'ytd-rich-item-renderer',
             text: '#video-title',
             media: 'img',
-            user: 'ytd-channel-name yt-formatted-string'
+            user: 'ytd-channel-name yt-formatted-string',
+            on: true
         }, {
             name: '油管搜索页',
             area: 'youtube',
@@ -183,7 +224,8 @@
             item: 'ytd-video-renderer',
             text: 'yt-formatted-string:eq(0)',
             media: 'img',
-            user: 'ytd-channel-name yt-formatted-string'
+            user: 'ytd-channel-name yt-formatted-string',
+            on: true
         }, {
             name: '油管视频页右侧推荐栏',
             area: 'youtube',
@@ -191,7 +233,8 @@
             item: 'ytd-item-section-renderer ytd-compact-video-renderer',
             text: '#video-title',
             media: 'img',
-            user: 'ytd-channel-name yt-formatted-string'
+            user: 'ytd-channel-name yt-formatted-string',
+            on: true
         }, {
             name: '推文列表',
             area: 'twitter',
@@ -199,7 +242,8 @@
             item: '[data-testid=tweet]',
             text: '[data-testid=tweetText]',
             media: '[data-testid=tweetPhoto], video',
-            user: '[data-testid=User-Names]'
+            user: '[data-testid=User-Names]',
+            on: true
         }]
     }
  
@@ -207,42 +251,56 @@
     var activeName,
     fullFuckOffTitle,
     fullFuckOffUsers,
-    areaList
+    fullFuckOffUsersWhite,
+    areaList,
+    areaListGM
  
-    // 预设监听
-    var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver,beforeTime = new Date(),
-    observer,
-    observerOption = {
-        childList: true,
-        subtree: true,
-    },
-    observerFunction = function() {}
+    // 初始化过滤
+    function fuckOffInit() {
+        // 完整屏蔽列表
+        areaListGM = GMGetValue('areaList')
  
-    // B站
-    function fuckOffBili(main = '', item = '', text = '', media = '', user = '') {
-        let fuckOffTitle = getFuckOffRegExp(fullFuckOffTitle);
-        let fuckOffUsers = getFuckOffRegExp(fullFuckOffUsers);
-        $(main + ' ' + item).each(function(){
-            let that = $(this)
-            let textString = text ? that.find(text).text():''
-            let userString = user ? that.find(user).text():''
-            if ((fuckOffTitle.test(textString) || fuckOffUsers.test(userString))) {
-                blurFuckOff('on', that, text, media)
-            } else {
-                blurFuckOff('off', that, text, media)
-            }
-        })
+        if (/bilibili/.test(document.domain)) {
+            areaList = getAreaList('bilibili')
+            initTabs(0)
+            fuckOffArea('bilibili')
+        }
+ 
+        if (/youtube/.test(document.domain)) {
+            areaList = getAreaList('youtube')
+            initTabs(1)
+            fuckOffArea('youtube')
+        }
+ 
+        if (/twitter/.test(document.domain)) {
+            areaList = getAreaList('twitter')
+            initTabs(2)
+            fuckOffArea('twitter')
+        }
+ 
+        // 表单赋值
+        $('#' + fullFuckOffTitle).val(GMGetValue(fullFuckOffTitle))
+        $('#' + fullFuckOffUsers).val(GMGetValue(fullFuckOffUsers))
+        $('#' + fullFuckOffUsersWhite).val(GMGetValue(fullFuckOffUsersWhite))
+ 
+        // 监听
+        GMChange(fullFuckOffTitle)
+        GMChange(fullFuckOffUsers)
+        GMChange(fullFuckOffUsersWhite)
     }
  
-    // 油管
-    function fuckOffYtb(main = '', item = '', text = '', media = '', user = '') {
+    // 公共
+    function fuckOffCommon(main = '', item = '', text = '', media = '', user = '') {
         let fuckOffTitle = getFuckOffRegExp(fullFuckOffTitle);
         let fuckOffUsers = getFuckOffRegExp(fullFuckOffUsers);
-        $(main + ' ' + item).each(function(){
+        let fuckOffUsersWhite = getFuckOffRegExp(fullFuckOffUsersWhite);
+        $(main).find(item).each(function(){
             let that = $(this)
             let textString = text ? that.find(text).text():''
             let userString = user ? that.find(user).text():''
-            if (fuckOffTitle.test(textString) || fuckOffUsers.test(userString)) {
+            if (fuckOffUsersWhite.test(userString)) {
+                // 白名单
+            } else if (fuckOffTitle.test(textString) || fuckOffUsers.test(userString)) {
                 blurFuckOff('on', that, text, media)
             } else {
                 blurFuckOff('off', that, text, media)
@@ -254,27 +312,14 @@
     function fuckOffTwitter(item = '', text = '', media = '', user = '') {
         let fuckOffTitle = getFuckOffRegExp(fullFuckOffTitle);
         let fuckOffUsers = getFuckOffRegExp(fullFuckOffUsers);
+        let fuckOffUsersWhite = getFuckOffRegExp(fullFuckOffUsersWhite);
         $(item).each(function(e){
             let that = $(this)
             let textString = text ? that.find(text).text():''
             let userString = user ? that.find(user).text():''
-            if ((fuckOffTitle.test(textString) || fuckOffUsers.test(userString)) && $(item).attr('tabindex') === '0') {
-                blurFuckOff('on', that, text, media)
-            } else {
-                blurFuckOff('off', that, text, media)
-            }
-        })
-    }
- 
-    // 公共
-    function fuckOffCommon(main = '', item = '', text = '', media = '', user = '') {
-        let fuckOffTitle = getFuckOffRegExp(fullFuckOffTitle);
-        let fuckOffUsers = getFuckOffRegExp(fullFuckOffUsers);
-        $(main + ' ' + item).each(function(){
-            let that = $(this)
-            let textString = text ? that.find(text).text():''
-            let userString = user ? that.find(user).text():''
-            if (fuckOffTitle.test(textString) || fuckOffUsers.test(userString)) {
+            if (fuckOffUsersWhite.test(userString)) {
+                // 白名单
+            } else if ((fuckOffTitle.test(textString) || fuckOffUsers.test(userString)) && $(item).attr('tabindex') === '0') {
                 blurFuckOff('on', that, text, media)
             } else {
                 blurFuckOff('off', that, text, media)
@@ -286,9 +331,10 @@
     function getAreaList(name = '', field = 'area') {
         let areaListGM = GMGetValue('areaList')
         let list = []
-        areaListGM.forEach(e => {
+        areaListGM.forEach((e, i) => {
             if (e[field] == name) {
                 list.push(e)
+                $('#fuckOffLayout #areaWrap .areaList').append('<div class="areaItem"><div class="name" title="' + e.name + '">' + e.name + '</div></div>')
             }
         });
         return list
@@ -298,19 +344,16 @@
     function fuckOffArea(name = '') {
         setInterval(() => {
             areaList.forEach(e => {
-                switch (name) {
-                    case 'bilibili':
-                        fuckOffBili(e.main, e.item, e.text, e.media, e.user)
-                        break;
-                    case 'youtube':
-                        fuckOffYtb(e.main, e.item, e.text, e.media, e.user)
-                        break;
-                    case 'twitter':
-                        fuckOffTwitter(e.item, e.text, e.media, e.user)
-                        break;
-                    default:
-                        fuckOffCommon(e.main, e.item, e.text, e.media, e.user)
-                        break;
+                // 启用屏蔽状态
+                if (e.on === true) {
+                    switch (name) {
+                        case 'twitter':
+                            fuckOffTwitter(e.item, e.text, e.media, e.user)
+                            break;
+                        default:
+                            fuckOffCommon(e.main, e.item, e.text, e.media, e.user)
+                            break;
+                    }
                 }
             })
         }, fuckOffDefaultConfig.fuckOffTimeout)
@@ -331,50 +374,6 @@
         }
     }
  
-    // 初始化过滤
-    function fuckOffInit() {
-        if (/bilibili/.test(document.domain)) {
-            areaList = getAreaList('bilibili')
-            initTabs(0)
-            fuckOffArea('bilibili')
-        }
- 
-        if (/youtube/.test(document.domain)) {
-            areaList = getAreaList('youtube')
-            initTabs(1)
-            fuckOffArea('youtube')
-        }
- 
-        if (/twitter/.test(document.domain)) {
-            areaList = getAreaList('twitter')
-            initTabs(2)
-            fuckOffArea('twitter')
-        }
- 
-        observer = new MutationObserver(function (records) {
-            var nowTime = new Date();
-            if (nowTime - beforeTime > fuckOffDefaultConfig.fuckOffTimeout) {
-                beforeTime = nowTime;
-                records.map(function (record) {
-                    // console.log(record)
-                    if (record.addedNodes) {
-                        observerFunction()
-                    }
-                });
-            }
-        });
- 
-        // 监听页面变化
-        observer.observe(document.body, observerOption);
- 
-        // 表单赋值
-        $('#' + fullFuckOffTitle).val(GMGetValue(fullFuckOffTitle))
-        $('#' + fullFuckOffUsers).val(GMGetValue(fullFuckOffUsers))
- 
-        // 监听
-        GMChange(fullFuckOffTitle)
-        GMChange(fullFuckOffUsers)
-    }
  
     // 恢复过滤前的状态
     function fuckOffRestart() {
@@ -391,6 +390,11 @@
     $('body').on('click', '#fuckOffLayout .tabs .tabs-title .tab', function() {
         initTabs($(this).index())
     })
+    
+    // 显示/隐藏屏蔽列表
+    $('body').on('click', '#fuckOffLayout .btnGroup .listButton, #fuckOffLayout #areaWrap .closeButton2', function() {
+        $('#fuckOffLayout #areaWrap').toggleClass('show')
+    })
  
     // 设置tab显示
     function initTabs(index = 0) {
@@ -401,12 +405,7 @@
         // 赋值键名
         fullFuckOffTitle = 'fuckOffTitle' + activeName
         fullFuckOffUsers = 'fuckOffUsers' + activeName
-        // 屏蔽区域文本
-        let areas = []
-        areaList.forEach(e => {
-            areas.push(e.name)
-        })
-        $('#fuckOffLayout .tabs-content .tab-item.active label').text(areas.join('、'))
+        fullFuckOffUsersWhite = 'fuckOffUsersWhite' + activeName
     }
  
     // 重置初始化设置
@@ -415,6 +414,7 @@
             clearInterval()
             GM_deleteValue(fullFuckOffTitle)
             GM_deleteValue(fullFuckOffUsers)
+            GM_deleteValue(fullFuckOffUsersWhite)
             fuckOffRestart()
             fuckOffInit()
         }
@@ -425,6 +425,7 @@
         clearInterval()
         GM_setValue(fullFuckOffTitle, $('#' + fullFuckOffTitle).val())
         GM_setValue(fullFuckOffUsers, $('#' + fullFuckOffUsers).val())
+        GM_setValue(fullFuckOffUsersWhite, $('#' + fullFuckOffUsersWhite).val())
         showMsg('保存成功')
         fuckOffRestart()
         fuckOffInit()
@@ -449,12 +450,12 @@
     }
  
     // 显示提示
-    function showMsg(msg = '') {
+    function showMsg(msg = '', timout = 3000) {
         $('#fuckOffMsg').text(msg)
         $('#fuckOffMsg').addClass('active')
         setTimeout(() => {
             $('#fuckOffMsg').removeClass('active')
-        }, 3000);
+        }, timout);
     }
  
     // 字符串转RegExp对象
@@ -483,7 +484,7 @@
     $('body').append(fuckOffOpenButton)
  
     // 设置界面
-    const fuckOffLayout = '<div id="fuckOffLayout"><div class="bg"></div><div class="box"><div class="cornerIcon lt"></div><div class="cornerIcon rt"></div><div class="cornerIcon lb"></div><div class="cornerIcon rb"></div><div class="toolerGroup"><a href="javascript:;"class="outlinkButton"target="_blank"title="作者视频介绍"></a><a href="javascript:;"class="helpButton"target="_blank"title="查看帮助文档"></a><a href="javascript:;"class="closeButton"title="关闭界面"></a></div><div class="header"><h1>原神内鬼屏蔽设置</h1></div><div class="body"><div class="tabs"><div class="tabs-title"><div class="tab active">B站</div><div class="tab">油管</div><div class="tab">推特</div></div><div class="tabs-content"><div class="tab-item active"data-name="Bili"><div class="form"><p>标题关键词</p><textarea id="fuckOffTitleBili"rows="5"></textarea></div><div class="form"><p>作者黑名单</p><textarea id="fuckOffUsersBili"rows="5"></textarea></div><div class="form"><p>屏蔽区域</p><label></label></div></div><div class="tab-item"data-name="Ytb"><div class="form"><p>标题关键词</p><textarea id="fuckOffTitleYtb"rows="5"></textarea></div><div class="form"><p>作者黑名单</p><textarea id="fuckOffUsersYtb"rows="5"></textarea></div><div class="form"><p>屏蔽区域</p><label></label></div></div><div class="tab-item"data-name="Twitter"><div class="form"><p>正文关键词</p><textarea id="fuckOffTitleTwitter"rows="5"></textarea></div><div class="form"><p>作者黑名单</p><textarea id="fuckOffUsersTwitter"rows="5"></textarea></div><div class="form"><p>屏蔽区域</p><label></label></div></div></div></div><div class="btnGroup"><div class="resetButton"title="初始化配置"alt=""><span></span><span></span></div><div class="submitButton"title="确认修改"alt=""><div class="yellow-circle"><div class="black-circle"></div></div></div></div><img src=""class="brImg"alt=""></div></div><div id="fuckOffMsg"></div></div>';
+    const fuckOffLayout = '<div id="fuckOffLayout"><div class="bg"></div><div class="box"><div class="cornerIcon lt"></div><div class="cornerIcon rt"></div><div class="cornerIcon lb"></div><div class="cornerIcon rb"></div><div class="toolerGroup"><a href="javascript:;"class="outlinkButton"target="_blank"title="作者B站主页"></a><a href="javascript:;"class="helpButton"target="_blank"title="查看帮助文档"></a><a href="javascript:;"class="closeButton"title="关闭界面"></a></div><div class="header"><h1>原神内鬼屏蔽设置</h1></div><div class="body"><div class="tabs"><div class="tabs-title"><div class="tab active">B站</div><div class="tab">油管</div><div class="tab">推特</div></div><div class="tabs-content"><div class="tab-item active"data-name="Bili"><div class="form"><p>标题关键词</p><textarea id="fuckOffTitleBili"rows="5"></textarea></div><div class="form"><p>作者黑名单</p><textarea id="fuckOffUsersBili"rows="5"></textarea></div><div class="form"><p>作者白名单</p><textarea id="fuckOffUsersWhiteBili"rows="5"></textarea></div></div><div class="tab-item"data-name="Ytb"><div class="form"><p>标题关键词</p><textarea id="fuckOffTitleYtb"rows="5"></textarea></div><div class="form"><p>作者黑名单</p><textarea id="fuckOffUsersYtb"rows="5"></textarea></div><div class="form"><p>作者白名单</p><textarea id="fuckOffUsersWhiteYtb"rows="5"></textarea></div></div><div class="tab-item"data-name="Twitter"><div class="form"><p>正文关键词</p><textarea id="fuckOffTitleTwitter"rows="5"></textarea></div><div class="form"><p>作者黑名单</p><textarea id="fuckOffUsersTwitter"rows="5"></textarea></div><div class="form"><p>作者白名单</p><textarea id="fuckOffUsersWhiteTwitter"rows="5"></textarea></div></div></div></div><div class="btnGroup"><div class="resetButton"title="初始化配置"alt=""><span></span><span></span></div><div class="listButton"title="查看屏蔽区域"alt=""><span></span><span></span><span></span></div><div class="submitButton"title="确认修改"alt=""><div class="yellow-circle"><div class="black-circle"></div></div></div></div><img src=""class="brImg"alt=""></div></div><div id="areaWrap"><div class="toolerGroup"><a href="javascript:;"class="closeButton2"title="关闭屏蔽列表"></a></div><div class="areaBox"><h2>屏蔽列表</h2><div class="areaList"></div></div></div><div id="fuckOffMsg"></div></div>';
     $('body').append(fuckOffLayout)
  
     $('#fuckOffOpenButton').css('background-image', 'url(' + fuckOffOpenButtonImg + ')')
@@ -492,6 +493,7 @@
     $('#fuckOffLayout .outlinkButton').css('background-image', 'url(' + outlinkIcon + ')').attr('href', fuckOffDefaultConfig.outLink)
     $('#fuckOffLayout .helpButton').css('background-image', 'url(' + helpIcon + ')').attr('href', fuckOffDefaultConfig.helpLink)
     $('#fuckOffLayout .closeButton').css('background-image', 'url(' + closeIcon + ')')
+    $('#fuckOffLayout #areaWrap .closeButton2').css('background-image', 'url(' + closeIcon + ')')
     $('.brImg').attr('src', brImg)
  
     // 初始化
@@ -564,7 +566,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             cursor: default;
-            z-index: 99998;
+            z-index: 99997;
         }
         #fuckOffLayout .box * {
             margin: 0;
@@ -650,11 +652,12 @@
             padding: 10px 0;
             max-height: 400px;
             overflow-x: hidden;
+            padding-right: 8px;
         }
         #fuckOffLayout .box .tabs-content .tab-item.active {
             display: block;
         }
-        #fuckOffLayout .box .tabs-content textarea {
+        #fuckOffLayout textarea, #fuckOffLayout input {
             width: 100%;
             box-sizing: border-box;
             resize:none;
@@ -664,8 +667,14 @@
             height: 120px;
             border-radius: 5px;
             background-color: #fff;
+            border: 0;
         }
-        #fuckOffLayout .box .tabs-content textarea:focus-visible {
+        #fuckOffLayout input {
+            padding: 4px 5px;
+            height: auto;
+            font-size: 14px;
+        }
+        #fuckOffLayout textarea:focus-visible, #fuckOffLayout input:focus-visible {
             outline: 0;
         }
         #fuckOffLayout .cornerIcon {
@@ -743,7 +752,7 @@
         .fuckOffBlur {
             filter: blur(30px);
         }
-        #fuckOffLayout .resetButton, #fuckOffLayout .submitButton {
+        #fuckOffLayout .resetButton, #fuckOffLayout .submitButton, #fuckOffLayout .listButton {
           background-color: #333333;
           border-radius: 50%;
           width: 68px;
@@ -754,7 +763,7 @@
           align-items: center;
           flex-wrap: wrap;
         }
-        #fuckOffLayout .resetButton span {
+        #fuckOffLayout .resetButton span, #fuckOffLayout .listButton span {
           border-radius: 10px;
           width: 35px;
           height: 5px;
@@ -770,6 +779,13 @@
           -webkit-transform: rotate(45deg) translate(-12px, -12px);
           transform: rotate(45deg) translate(-12px, -12px);
         }
+        #fuckOffLayout .listButton {
+            flex-direction: column;
+        }
+        #fuckOffLayout .listButton span {
+          background-color: #ece5d8;
+          margin: 4px 0
+        }
         #fuckOffLayout .submitButton .yellow-circle {
           width: 35px;
           height: 35px;
@@ -784,6 +800,69 @@
           width: 28px;
           height: 28px;
           border-radius: 50%;
+        }
+        #fuckOffLayout #areaWrap {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 400px;
+            border-radius: 2px;
+            background-color: #323947;
+            color: #fff;
+            display: none;
+            text-align: center;
+            z-index: 99998;
+            border: 5px solid #fff;
+            border-radius: 10px;
+        }
+        #fuckOffLayout #areaWrap.show {
+            display: block;
+        }
+        #fuckOffLayout #areaWrap .toolerGroup {
+            top: 12px;
+        }
+        #fuckOffLayout #areaWrap .areaBox {
+            padding: 12px;
+        }
+        #fuckOffLayout #areaWrap .areaBox h2 {
+            font-size: 18px;
+            font-weight: 400;
+            margin: 0;
+            color: #fff;
+        }
+        #fuckOffLayout #areaWrap .areaBox .areaList {
+            margin-top: 10px;
+            overflow-x: hidden;
+            max-height: 340px;
+            padding: 0 2px;
+        }
+        #fuckOffLayout #areaWrap .areaBox .areaList .areaItem {
+            padding: 0px 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #323947;
+            height: 33px;
+        }
+        #fuckOffLayout #areaWrap .areaBox .areaList .areaItem:hover {
+            transform: scale(1.01);
+        }
+        #fuckOffLayout #areaWrap .areaBox .areaList .areaItem:last-child {
+            margin-bottom: 0;
+        }
+        #fuckOffLayout #areaWrap .areaBox .areaList .areaItem .name {
+            width: 100%;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            cursor: pointer;
+            text-align: left;
+            font-size: 14px;
         }
         @media screen and (max-width: 768px){
             #fuckOffLayout .box {
