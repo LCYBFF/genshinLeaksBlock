@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         B站、油管、推特屏蔽原神内鬼爆料相关视频
 // @namespace    http://tampermonkey.net/
-// @version      2.2.1
-// @description  祝原神爆料内鬼和传话太监冚家富贵
+// @version      2.2.2
+// @description  屏蔽B站、油管、推特三大平台的原神内鬼爆料视频和消息
 // @author       凡云 - https://space.bilibili.com/3491267
 // @match        *://*.bilibili.com/*
 // @match        *://*.youtube.com/*
