@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         B站、油管、推特屏蔽原神内鬼爆料相关视频
 // @namespace    http://tampermonkey.net/
-// @version      2.2.0
+// @version      2.2.1
 // @description  祝原神爆料内鬼和传话太监冚家富贵
 // @author       凡云 - https://space.bilibili.com/3491267
 // @match        *://*.bilibili.com/*
@@ -161,7 +161,7 @@
             item: '.bili-dyn-list__item',
             text: '.bili-dyn-content__orig__desc, .bili-dyn-card-video__title',
             media: '.bili-album__preview__picture, .bili-awesome-img',
-            user: '',
+            user: '.bili-dyn-title span',
             on: true
         }, {
             name: 'B站评论区评论文本（旧版）楼主回复',
@@ -298,7 +298,7 @@
             let that = $(this)
             let textString = text ? that.find(text).text():''
             let userString = user ? that.find(user).text():''
-            if (fuckOffUsersWhite.test(userString)) {
+            if (fuckOffUsersWhite.test(userString.trim())) {
                 // 白名单
             } else if (fuckOffTitle.test(textString) || fuckOffUsers.test(userString)) {
                 blurFuckOff('on', that, text, media)
@@ -317,7 +317,7 @@
             let that = $(this)
             let textString = text ? that.find(text).text():''
             let userString = user ? that.find(user).text():''
-            if (fuckOffUsersWhite.test(userString)) {
+            if (fuckOffUsersWhite.test(userString.trim())) {
                 // 白名单
             } else if ((fuckOffTitle.test(textString) || fuckOffUsers.test(userString)) && $(item).attr('tabindex') === '0') {
                 blurFuckOff('on', that, text, media)
